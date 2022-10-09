@@ -324,7 +324,9 @@ local HandleNetwork = {
 }
 
 local onUpdateTimer = 0
+local pingTimer = 0
 local function onUpdate(dt)
+	pingTimer = pingTimer + dt -- TODO: clean this up a bit
 	onUpdateTimer = onUpdateTimer + dt
 	--====================================================== DATA RECEIVE ======================================================
 	if launcherConnected then
@@ -350,6 +352,10 @@ local function onUpdate(dt)
 			--else send('Up') end -- TODO: only send this when loaded in
 			onUpdateTimer = 0
 		end
+		if pingTimer > 0.5 then --TODO: only ask for ping if in session and loaded in a map
+			pingTimer = 0
+			send('Up') -- request ping packet
+		end
 		--[[
 			if launcherConnectionTimer > 15 then
 				disconnectLauncher(true) -- reconnect to launcher (this breaks the launcher if the connection
@@ -374,7 +380,6 @@ end
 
 onLauncherConnected = function()
 	log('W', 'onLauncherConnected', 'onLauncherConnected')
-	log('W', 'send', 'Launcher connected!')
 	send('Z') -- request launcher version
 	autoLogin()
 	requestServerList()
@@ -413,7 +418,7 @@ local function onUiChangedState (curUIState, prevUIState)
 	end
 end
 
-local function onSerialize()
+local function onSerialize() --TODO: reimplement server rejoin on lua reload
 	return currentServer
 end
 local function onDeserialized(serverInfo)
