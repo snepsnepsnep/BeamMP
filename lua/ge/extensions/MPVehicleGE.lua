@@ -663,7 +663,7 @@ end
 
 --============================ ON VEHICLE REMOVED (CLIENT) ============================
 local function onVehicleDestroyed(gameVehicleID)
-	if MPGameNetwork.connectionStatus() > 0 then -- If TCP connected
+	if MPGameNetwork.launcherConnected() then
 		local vehicle = getVehicleByGameID(gameVehicleID)
 
 		log('W', 'onVehicleDestroyed', gameVehicleID .. ' ' )
@@ -766,7 +766,7 @@ end
 
 --============================ ON VEHICLE RESETTED (CLIENT) ============================
 local function onVehicleResetted(gameVehicleID)
-	if MPGameNetwork.connectionStatus() > 0 then -- If TCP connected
+	if MPGameNetwork.launcherConnected() then
 		local vehicle = getVehicleByGameID(gameVehicleID)
 		if vehicle and vehicle.serverVehicleString and vehicle.isLocal then -- If serverVehicleID not null and player own vehicle -- If it's not null
 			--print("Vehicle "..gameVehicleID.." resetted by client")
@@ -1224,13 +1224,13 @@ end
 
 
 local function onUpdate(dt)
-	if MPGameNetwork and MPGameNetwork.connectionStatus() == 1 then -- If TCP connected
+	if MPGameNetwork and MPGameNetwork.launcherConnected() then
 		localCounter = localCounter + dt
 	end
 end
 
 local function onPreRender(dt)
-	if MPGameNetwork and MPGameNetwork.connectionStatus() > 0 then -- If TCP connected
+	if MPGameNetwork and MPGameNetwork.launcherConnected() then
 
 		-- get current vehicle ID and position
 		local activeVeh = be:getPlayerVehicle(0)
