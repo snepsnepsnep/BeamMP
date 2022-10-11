@@ -7,6 +7,7 @@ log("M", "multiplayer", "Gamemode Loaded")
 local originalGetDriverData = nop
 local originalToggleWalkingMode = nop
 
+
 local function modifiedGetDriverData(veh)
 	if not veh then return nil end
 	local caller = debug.getinfo(2).name
